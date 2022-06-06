@@ -52,7 +52,7 @@ d_pnl = manager.get_pnl_report()
 
 def get_realized_pnl(start, end, pnls):
     def formatter_date(d):
-        return pd.to_datetime(d).strftime('%Y-%m-%d %H:%M:%s')
+        return pd.to_datetime(d).strftime('%Y-%m-%d %H:%M:%S')
     _start = formatter_date(start)
     _end = formatter_date(end)
     def _get_realized_pnl(pnl_long):
@@ -60,7 +60,7 @@ def get_realized_pnl(start, end, pnls):
         res = {
             'pnl': sum(x.calculate() for x in _pnl_long),
             'fees': sum(x.get_fees() for x in _pnl_long),
-            'valeur globale cession': sum(x.close_order.price * -x.close_order.quantity  for x in _pnl_long),
+            'valeur globale cession': sum(x.close_order.price * -x.close_order.quantity for x in _pnl_long),
             'frais de cession': sum(x.close_order.fee for x in _pnl_long),
             'prix total acquisition': sum(sum(t.price * t.quantity + t.fee for t in x.closed_trades) for x in _pnl_long)
         }

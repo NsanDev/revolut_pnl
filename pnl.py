@@ -5,6 +5,7 @@ class Trade:
         self.tradetime = tradetime
         self.symbol = symbol
         self.quantity = quantity
+        self.fee_opening = fee
         self.fee = fee
         self.currency = currency
         self.price = price
@@ -77,6 +78,11 @@ class Manager:
                 if q > q_target:
                     t = open_trades[0].copy()
                     t.quantity = sign * q_target
+                    fraction_fee = abs(q_target) / abs(q)
+                    assert fraction_fee <= 1
+                    assert fraction_fee >= 0
+                    t.fee *= fraction_fee
+                    open_trades[0].fee *= (1-fraction_fee)
                     pnl.closed_trades.append(t)
                     open_trades[0].quantity = sign * (q - q_target)
                 q_target = round(max(0, q_target - q), 3)
